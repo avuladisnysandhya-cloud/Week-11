@@ -17,7 +17,7 @@ if page == "Dashboard":
                SUM(survived) AS survivors,
                ROUND(AVG(age)::numeric, 1) AS avg_age,
                ROUND(AVG(fare)::numeric, 2) AS avg_fare
-        FROM passengers
+        FROM titanic_project.passengers
     """).iloc[0]
 
     c1, c2, c3, c4 = st.columns(4)
@@ -34,7 +34,7 @@ if page == "Dashboard":
 
         by_class = run_query("""
             SELECT pclass::text AS class, COUNT(*) AS passengers
-            FROM passengers
+            FROM titanic_project.passengers
             GROUP BY pclass
             ORDER BY pclass
         """)
@@ -48,7 +48,7 @@ if page == "Dashboard":
             SELECT sex,
                    ROUND(100.0 * SUM(survived) / COUNT(*), 2)
                    AS survival_percentage
-            FROM passengers
+            FROM titanic_project.passengers
             GROUP BY sex
             ORDER BY sex
         """)
@@ -61,7 +61,7 @@ if page == "Dashboard":
         SELECT COUNT(*) - COUNT(age) AS missing_age,
                COUNT(*) - COUNT(embarked) AS missing_embarked,
                COUNT(*) - COUNT(cabin) AS missing_cabin
-        FROM passengers
+        FROM titanic_project.passengers
     """)
 
     st.dataframe(missing, hide_index=True)
@@ -92,7 +92,7 @@ elif page == "Data Explorer":
         sql = """
             SELECT passengerid, name, sex, age, pclass,
                    fare, embarked, cabin, survived
-            FROM passengers
+            FROM titanic_project.passengers
             WHERE pclass = ANY(%s) AND sex = ANY(%s)
         """
 
@@ -129,7 +129,7 @@ elif page == "SQL Practice":
 
     default_sql = (
         "SELECT pclass, COUNT(*) AS passengers\n"
-        "FROM passengers\n"
+        "FROM titanic_project.passengers\n"
         "GROUP BY pclass\n"
         "ORDER BY pclass;"
     )
@@ -175,7 +175,7 @@ try:
     df = run_query("""
         SELECT passengerid, name, sex, age, sibsp, parch,
                embarked, fare, pclass, survived
-        FROM passengers
+        FROM titanic_project.passengers
     """)
 except Exception as e:
     st.error(f"Database connection error: {e}")

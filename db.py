@@ -9,9 +9,8 @@ def get_connection():
         database=st.secrets["DB_NAME"],
         user=st.secrets["DB_USER"],
         password=st.secrets["DB_PASSWORD"],
-        port=st.secrets["DB_PORT"],
-        sslmode="require",
-        options="-c search_path=titanic_project,public"
+        port=int(st.secrets["DB_PORT"]),
+        sslmode="require"
     )
 
 def run_query(query, params=None):
